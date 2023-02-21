@@ -1,0 +1,19 @@
+@media (max-width:767px) {
+    .table-xs {
+        width:100%;
+        height:99%;
+        font-size:12px
+    }
+
+    .table-xs .text-break {
+        font-size:10px !important
+    }
+
+    .table-xs .mat-sort-header {
+        font-size:11px !important
+    }
+
+    .mdc-data-table__cell, .mdc-data-table__header-cell {
+        padding: 0px 5px 0px 5px !important
+    }
+}

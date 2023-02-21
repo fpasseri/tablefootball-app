@@ -1,0 +1,21 @@
+<h3 mat-dialog-title>{{ data.title }}</h3>
+<form [formGroup]="form">
+  <div class="container-fluid">
+    <div class="row" >
+      <div class="col-12 col-md-6">
+        <mat-form-field style="width: 100%;">
+          <input matInput formControlName="nome" placeholder="Nome">
+        </mat-form-field>
+      </div>
+      <div class="col-12 col-md-6">
+        <mat-form-field style="width: 100%;">
+          <input matInput formControlName="cognome" placeholder="Cognome">
+        </mat-form-field>
+      </div>
+    </div>
+    <div mat-dialog-actions class="d-flex justify-content-center py-4">
+      <button mat-raised-button color="warn" class="mx-2" (click)="onNoClick()">ANNULLA</button>
+      <button mat-raised-button  class="mx-2" (click)="onApply()"cdkFocusInitial>OK</button>
+    </div>
+  </div>
+</form>

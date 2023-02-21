@@ -38,14 +38,27 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-
+// Import Firebase modules + environment
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
+import { environment } from '../environments/environments';
+import { ToastrModule } from 'ngx-toastr';
+import { AddDialogComponent } from './add-dialog/add-dialog.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { StandingComponent } from './standing/standing.component';
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AddDialogComponent,
+    StandingComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     MatAutocompleteModule,
     MatBadgeModule,
@@ -82,7 +95,13 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatToolbarModule,
     MatTooltipModule,
     MatTreeModule,
-    DragDropModule
+    DragDropModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireAuthModule,
+    AngularFirestoreModule,
+    AngularFireStorageModule,
+    AngularFireDatabaseModule,
+    ToastrModule.forRoot()
   ],
   exports: [],
   providers: [

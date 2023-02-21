@@ -1,0 +1,77 @@
+<h3 mat-dialog-title>{{ data.title }}</h3>
+
+<ng-container>
+  <div class="table-responsive table-xs">
+    <table mat-table matSort [dataSource]="matTableDataSource" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="nome">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Player</th>
+        <td mat-cell *matCellDef="let element">
+          <div class="text-break">
+            {{ element?.nome | slice : 0 : 1 }}. {{ element?.cognome }}
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="giocate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>P</th>
+        <td mat-cell *matCellDef="let element">
+          <div class="text-break">
+            {{ element.vinte + element.perse }}
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="vinte">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>W</th>
+        <td mat-cell *matCellDef="let element">
+          <div class="text-break">
+            {{ element.vinte }}
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="perse">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>L</th>
+        <td mat-cell *matCellDef="let element">
+          <div class="text-break">
+            {{ element.perse }}
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="golFatti">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>GS</th>
+        <td mat-cell *matCellDef="let element">
+          <div class="text-break">
+            {{ element.golFatti }}
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="golSubiti">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>GA</th>
+        <td mat-cell *matCellDef="let element">
+          <div class="text-break">
+            {{ element.golSubiti }}
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="%">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>% W</th>
+        <td mat-cell *matCellDef="let element">
+          <div class="text-break" style="color:yellow;font-size: 12px;">
+            {{ (element.vinte / (element.vinte + element.perse) * 100) | number: '1.2-2'}} %
+          </div>
+        </td>
+      </ng-container>
+
+    
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+
+</ng-container>

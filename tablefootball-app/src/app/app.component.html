@@ -2,10 +2,15 @@
 <div class="toolbar" role="banner">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-4 col-0"></div>
-      <div class="col-md-4 col-8 p-4 title">TABLEFOOTBALL APP</div>
-      <div class="col-md-4 col-4 p-3 text-center">
-        <button mat-raised-button color="accent">ADD PLAYER</button>
+      <div class="col-md-4 col-6 p-3 text-center d-none d-md-block">
+        <button mat-raised-button color="accent" (click)="showStanding()">STANDING</button>
+      </div>
+      <div class="col-md-4 col-12 p-4 title">TABLEFOOTBALL APP</div>
+      <div class="col-md-4 col-6 p-3 text-center d-block d-md-none">
+        <button mat-raised-button color="accent" (click)="showStanding()">STANDING</button>
+      </div>
+      <div class="col-md-4 col-6 p-3 text-center">
+        <button mat-raised-button color="accent" (click)="addPlayer()">ADD PLAYER</button>
       </div>
     </div>
   </div>
@@ -16,121 +21,183 @@
   <!-- Highlight Card -->
   <div class="wallpaper" style="width: 100%;">
     <div class="container-fluid">
-      <div class="row" cdkDropListGroup>
+      <form [formGroup]="form">
+        <div class="row" cdkDropListGroup>
+          <div class="col-md-3 col-12 example-container d-none d-md-block"> <!-- solo desktop-->
+            <p class="text-normal p-2 mt-3">PLAYERS LIST</p>
+            <div cdkDropList [cdkDropListData]="players" class="example-list" (cdkDropListDropped)="drop($event)">
+              <div class="example-box" *ngFor="let item of players" cdkDrag>
+                {{item.nome}} {{item.cognome}}</div>
+            </div>
+          </div>
+          <div class="col-md-9 col-12">
+            <div class="row mt-3">
+              <div class="col-md-4 col-6 example-container example-container2">
+                <p class="text-normal p-2 d-none d-md-block">PLAYER1</p>
+                <div cdkDropList [cdkDropListData]="player1"
+                  [cdkDropListEnterPredicate]="dropListEnterPredicate(player1)" class="example-list d-none d-md-block"
+                  (cdkDropListDropped)="drop($event)">
+                  <div class="example-box" *ngFor="let item of player1" cdkDrag>{{item.nome}} {{item.cognome}}</div>
+                </div>
 
-        <div class="col-md-3 col-12 example-container">
-          <p class="text-normal p-2 mt-3">PLAYERS LIST</p>
-          <div cdkDropList [cdkDropListData]="todo" class="example-list" (cdkDropListDropped)="drop($event)">
-            <div class="example-box" *ngFor="let item of todo" cdkDrag>
-              {{item}}</div>
+                <mat-form-field class="d-block d-md-none">
+                  <mat-select placeholder="Player 1"
+                    formControlName="player1">
+                    <mat-option *ngFor="let player of players" [value]="player.$key"
+                    [disabled]="player.$key == player2Value || player.$key == player3Value || player.$key == player4Value">
+                      {{ player?.nome | slice:0:1}}. {{ player?.cognome }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="form.get('player1').errors?.required">
+                    Il campo è obbligatorio
+                  </mat-error>
+                </mat-form-field>
+
+              </div>
+              <div class="col-md-4 col-6 example-container example-container2">
+                <p class="text-normal p-2 d-none d-md-block">PLAYER 2</p>
+
+                <div cdkDropList [cdkDropListData]="player2"
+                  [cdkDropListEnterPredicate]="dropListEnterPredicate(player2)" class="example-list d-none d-md-block"
+                  (cdkDropListDropped)="drop($event)">
+                  <div class="example-box" *ngFor="let item of player2" cdkDrag>{{item.nome}} {{item.cognome}}</div>
+                </div>
+
+                <mat-form-field class="d-block d-md-none">
+                  <mat-select placeholder="Player 2"
+                    formControlName="player2">
+                    <mat-option *ngFor="let player of players" [value]="player.$key"
+                    [disabled]="player.$key == player1Value || player.$key == player3Value || player.$key == player4Value">
+                      {{ player?.nome | slice:0:1}}. {{ player?.cognome }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="form.get('player2').errors?.required">
+                    Il campo è obbligatorio
+                  </mat-error>
+                </mat-form-field>
+
+              </div>
+              <div class="col-md-4 col-12 text-center-xs">
+                <p class="text-normal d-none d-md-block p-2">GOL</p>
+                <mat-form-field class="gol-xs">
+                  <mat-select formControlName="gol1" placeholder="GOL">
+                    <mat-option value="1">1</mat-option>
+                    <mat-option value="2">2</mat-option>
+                    <mat-option value="3">3</mat-option>
+                    <mat-option value="4">4</mat-option>
+                    <mat-option value="5">5</mat-option>
+                    <mat-option value="6">6</mat-option>
+                    <mat-option value="7">7</mat-option>
+                    <mat-option value="8">8</mat-option>
+                    <mat-option value="9">9</mat-option>
+                    <mat-option value="10">10</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row" style="display: inline-block;">
+              <div class="col col-md-6 ps-0-xs" style="display: inline;">
+                <img alt="biliardino" src="assets\biliardino.jpg" class="ps-0 p-1 biliardino img-fluid">
+              </div>
+              <div class="col-4 text-center d-none d-md-inline" style="display: inline;">
+                <button class="save align-middle" mat-raised-button color="primary" (click)="saveMatch()">SAVE MATCH</button>
+              </div>
+              <div class="col-2"></div>
+            </div>
+
+            <div class="row d-block d-md-none">
+              <div class="col-md-4 col-12 text-center-xs">
+                <p class="text-normal d-none d-md-block p-2">GOL</p>
+                <mat-form-field class="gol-xs">
+                  <mat-select formControlName="gol2" placeholder="GOL">
+                    <mat-option value="1">1</mat-option>
+                    <mat-option value="2">2</mat-option>
+                    <mat-option value="3">3</mat-option>
+                    <mat-option value="4">4</mat-option>
+                    <mat-option value="5">5</mat-option>
+                    <mat-option value="6">6</mat-option>
+                    <mat-option value="7">7</mat-option>
+                    <mat-option value="8">8</mat-option>
+                    <mat-option value="9">9</mat-option>
+                    <mat-option value="10">10</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row mt-3">
+              <div class="col-md-4 col-6 example-container example-container2">
+                <p class="text-normal p-2 d-none d-md-block">PLAYER 3</p>
+                <div cdkDropList [cdkDropListData]="player3"
+                  [cdkDropListEnterPredicate]="dropListEnterPredicate(player3)" class="example-list d-none d-md-block"
+                  (cdkDropListDropped)="drop($event)">
+                  <div class="example-box" *ngFor="let item of player3">{{item.nome}} {{item.cognome}}</div>
+                </div>
+
+                <mat-form-field class="d-block d-md-none">
+                  <mat-select placeholder="Player 3"
+                    formControlName="player3">
+                    <mat-option *ngFor="let player of players" [value]="player.$key"
+                    [disabled]="player.$key == player1Value || player.$key == player2Value || player.$key == player4Value">
+                      {{ player?.nome | slice:0:1}}. {{ player?.cognome }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="form.get('player3').errors?.required">
+                    Il campo è obbligatorio
+                  </mat-error>
+                </mat-form-field>
+
+              </div>
+              <div class="col-md-4 col-6 example-container example-container2">
+                <p class="text-normal p-2 d-none d-md-block">PLAYER4 </p>
+                <div cdkDropList [cdkDropListData]="player4"
+                  [cdkDropListEnterPredicate]="dropListEnterPredicate(player4)" class="example-list d-none d-md-block"
+                  (cdkDropListDropped)="drop($event)">
+                  <div class="example-box" *ngFor="let item of player4">{{item.nome}} {{item.cognome}}</div>
+                </div>
+
+                <mat-form-field class="d-block d-md-none">
+                  <mat-select placeholder="Player 4"
+                    formControlName="player4">
+                    <mat-option *ngFor="let player of players" [value]="player.$key" 
+                    [disabled]="player.$key == player1Value || player.$key == player2Value || player.$key == player3Value">
+                      {{ player?.nome | slice:0:1}}. {{ player?.cognome }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="form.get('player4').errors?.required">
+                    Il campo è obbligatorio
+                  </mat-error>
+                </mat-form-field>
+
+              </div>
+              <div class="col-md-4 col-12 text-center-xs d-none d-md-block">
+                <p class="text-normal d-none d-md-block p-2">GOL</p>
+                <mat-form-field class="gol-xs">
+                  <mat-select formControlName="gol2" placeholder="GOL">
+                    <mat-option value="1">1</mat-option>
+                    <mat-option value="2">2</mat-option>
+                    <mat-option value="3">3</mat-option>
+                    <mat-option value="4">4</mat-option>
+                    <mat-option value="5">5</mat-option>
+                    <mat-option value="6">6</mat-option>
+                    <mat-option value="7">7</mat-option>
+                    <mat-option value="8">8</mat-option>
+                    <mat-option value="9">9</mat-option>
+                    <mat-option value="10">10</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+            </div>
+
+            <div class="col d-block d-md-none text-center" style="display: inline;">
+              <button class="save align-middle" mat-raised-button color="primary" (click)="saveMatchXs()">SAVE MATCH</button>
+            </div>
+
           </div>
         </div>
-        <div class="col-md-9 col-12">
-          <div class="row mt-3">
-            <div class="col-md-4 col-6 example-container example-container2">
-              <p class="text-normal p-2">PLAYER1</p>
-              <div cdkDropList [cdkDropListData]="player1" [cdkDropListEnterPredicate]="dropListEnterPredicate(player1)" 
-              class="example-list" (cdkDropListDropped)="drop($event)">
-                <div class="example-box" *ngFor="let item of player1" cdkDrag>{{item}}</div>
-              </div>
-            </div>
-            <div class="col-md-4 col-6 example-container example-container2">
-              <p class="text-normal p-2">PLAYER 2</p>
-              <div cdkDropList [cdkDropListData]="player2" [cdkDropListEnterPredicate]="dropListEnterPredicate(player2)" 
-              class="example-list" (cdkDropListDropped)="drop($event)">
-                <div class="example-box" *ngFor="let item of player2" cdkDrag>{{item}}</div>
-              </div>
-            </div>
-            <div class="col-md-4 col-12 text-center-xs">
-              <p class="text-normal d-none d-md-block p-2">GOL</p>
-              <mat-form-field class="gol-xs">
-                <mat-select formControlName="gol1" placeholder="GOL">
-                    <mat-option value="1">1</mat-option>
-                    <mat-option value="2">2</mat-option>
-                    <mat-option value="3">3</mat-option>
-                    <mat-option value="4">4</mat-option>
-                    <mat-option value="5">5</mat-option>
-                    <mat-option value="6">6</mat-option>
-                    <mat-option value="7">7</mat-option>
-                    <mat-option value="8">8</mat-option>
-                    <mat-option value="9">9</mat-option>
-                    <mat-option value="10">10</mat-option>
-                </mat-select>
-            </mat-form-field>
-            </div>
-          </div>
-
-          <div class="row" style="display: inline-block;">
-            <div class="col-6" style="display: inline;">
-              <img alt="biliardino" src="assets\biliardino.jpg" class="ps-0 p-2 biliardino img-fluid">
-            </div>
-            <div class="col-4 text-center d-none d-md-inline" style="display: inline;">
-              <button class="save align-middle" mat-raised-button color="primary">SAVE MATCH</button>
-            </div>
-            <div class="col-2"></div>
-          </div>
-
-          <div class="row d-block d-md-none">
-            <div class="col-md-4 col-12 text-center-xs">
-              <p class="text-normal d-none d-md-block p-2">GOL</p>
-              <mat-form-field class="gol-xs">
-                <mat-select formControlName="gol1" placeholder="GOL">
-                    <mat-option value="1">1</mat-option>
-                    <mat-option value="2">2</mat-option>
-                    <mat-option value="3">3</mat-option>
-                    <mat-option value="4">4</mat-option>
-                    <mat-option value="5">5</mat-option>
-                    <mat-option value="6">6</mat-option>
-                    <mat-option value="7">7</mat-option>
-                    <mat-option value="8">8</mat-option>
-                    <mat-option value="9">9</mat-option>
-                    <mat-option value="10">10</mat-option>
-                </mat-select>
-            </mat-form-field>
-            </div>
-          </div>
-
-          <div class="row mt-3">
-            <div class="col-md-4 col-6 example-container example-container2">
-              <p class="text-normal p-2">PLAYER 3</p>
-              <div cdkDropList [cdkDropListData]="player3" [cdkDropListEnterPredicate]="dropListEnterPredicate(player3)" 
-              class="example-list" (cdkDropListDropped)="drop($event)">
-                <div class="example-box" *ngFor="let item of player3">{{item}}</div>
-              </div>
-            </div>
-            <div class="col-md-4 col-6 example-container example-container2">
-              <p class="text-normal p-2">PLAYER4 </p>
-              <div cdkDropList [cdkDropListData]="player4" [cdkDropListEnterPredicate]="dropListEnterPredicate(player4)" 
-              class="example-list" (cdkDropListDropped)="drop($event)">
-                <div class="example-box" *ngFor="let item of player4">{{item}}</div>
-              </div>
-            </div>
-            <div class="col-md-4 col-12 text-center-xs d-none d-md-block">
-              <p class="text-normal d-none d-md-block p-2">GOL</p>
-              <mat-form-field class="gol-xs">
-                <mat-select  formControlName="gol2" placeholder="GOL">
-                    <mat-option value="1">1</mat-option>
-                    <mat-option value="2">2</mat-option>
-                    <mat-option value="3">3</mat-option>
-                    <mat-option value="4">4</mat-option>
-                    <mat-option value="5">5</mat-option>
-                    <mat-option value="6">6</mat-option>
-                    <mat-option value="7">7</mat-option>
-                    <mat-option value="8">8</mat-option>
-                    <mat-option value="9">9</mat-option>
-                    <mat-option value="10">10</mat-option>
-                </mat-select>
-            </mat-form-field>
-            </div>
-
-          </div>
-
-          <div class="col d-block d-md-none text-center" style="display: inline;">
-            <button class="save align-middle " mat-raised-button color="primary">SAVE MATCH</button>
-          </div>
-
-        </div>
-      </div>
+      </form>
     </div>
   </div>
 </div>
